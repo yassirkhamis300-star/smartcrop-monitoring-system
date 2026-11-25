@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="refresh" content="5">
+
+    <title>SmartCrop Monitoring System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f1;
+            color: #24352a;
+        }
+
+        header {
+            background: #176b3a;
+            color: white;
+            padding: 25px 35px;
+        }
+
+        header h1 {
+            font-size: 27px;
+        }
+
+        header p {
+            margin-top: 8px;
+            color: #d9f5e2;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        .section-title {
+            margin: 25px 0 18px;
+            font-size: 21px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 13px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card h3 {
+            font-size: 16px;
+            color: #657568;
+            margin-bottom: 18px;
+        }
+
+        .value {
+            font-size: 30px;
+            font-weight: bold;
+            color: #176b3a;
+        }
+
+        .unit {
+            font-size: 15px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 23px;
+            border-radius: 13px;
+            line-height: 2;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        .recommendation {
+            border-left: 5px solid #176b3a;
+            background: #e4f3e8;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.7;
+        }
+
+        .status {
+            color: #176b3a;
+            font-weight: bold;
+        }
+
+        .refresh-info {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #e0f5e5;
+        }
+
+        footer {
+            margin-top: 45px;
+            background: #176b3a;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            line-height: 1.8;
+        }
+
+        @media(max-width: 600px) {
+            header {
+                padding: 22px 18px;
+            }
+
+            header h1 {
+                font-size: 21px;
+            }
+
+            .container {
+                padding: 20px 14px;
+            }
+
+            .value {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>🌱 SmartCrop Monitoring System</h1>
+
+    <p>
+        Intelligent Crop Monitoring and Environmental Analysis
+    </p>
+
+    <p class="refresh-info">
+        🔄 Dashboard automatically refreshes every 5 seconds
+    </p>
+
+</header>
+
+
+<div class="container">
+
+    <!-- SENSOR MONITORING -->
+
+    <h2 class="section-title">
+        Live Sensor Monitoring
+    </h2>
+
+    <div class="cards">
+
+        <!-- TEMPERATURE -->
+
+        <div class="card">
+
+            <h3>🌡️ Temperature</h3>
+
+            <p class="value">
+                {{ "%.1f"|format(latest["temperature"]) if latest else "--" }}
+                <span class="unit">°C</span>
+            </p>
+
+        </div>
+
+
+        <!-- HUMIDITY -->
+
+        <div class="card">
+
+            <h3>💧 Humidity</h3>
+
+            <p class="value">
+                {{ "%.1f"|format(latest["humidity"]) if latest else "--" }}
+                <span class="unit">%</span>
+            </p>
+
+        </div>
+
+
+        <!-- SOIL MOISTURE -->
+
+        <div class="card">
+
+            <h3>🌿 Soil Moisture</h3>
+
+            <p class="value">
+                {{ "%.1f"|format(latest["soil_moisture"]) if latest else "--" }}
+                <span class="unit">%</span>
+            </p>
+
+        </div>
+
+
+        <!-- LEAF WETNESS -->
+
+        <div class="card">
+
+            <h3>🍃 Leaf Wetness</h3>
+
+            <p class="value">
+                {{ "%.1f"|format(latest["leaf_wetness"]) if latest else "--" }}
+                <span class="unit">%</span>
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- SMART RECOMMENDATIONS -->
+
+    <h2 class="section-title">
+        Smart Recommendations
+    </h2>
+
+    <div class="recommendation">
+
+        {% if latest %}
+
+            <h3>🌱 Crop Monitoring Advice</h3>
+
+            <p>
+                Sensor data has been successfully retrieved.
+                Check the monitoring analysis for crop conditions.
+            </p>
+
+        {% else %}
+
+            <p>
+                No sensor data is currently available.
+                Please check the sensor simulator.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- SYSTEM INFORMATION -->
+
+    <h2 class="section-title">
+        System Information
+    </h2>
+
+    <div class="info-card">
+
+        <p>
+            <strong>Total Database Records:</strong>
+            {{ total }}
+        </p>
+
+        <p>
+            <strong>Last Update:</strong>
+
+            {{ latest["timestamp"] if latest else "No data available" }}
+
+        </p>
+
+        <p>
+            <strong>System Status:</strong>
+
+            <span class="status">
+                {{ latest["system_status"] if latest else "Waiting for data" }}
+            </span>
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    <p>
+        © 2026 SmartCrop Monitoring System
+    </p>
+
+    <p>
+        Intelligent Agriculture Through Technology 🌱
+    </p>
+
+</footer>
+
+</body>
+</html>
