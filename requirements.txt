@@ -1,0 +1,3 @@
+# SmartCrop dependencies
+# Python standard libraries:
+# sqlite3, random, datetime, time
